@@ -1,0 +1,167 @@
+<GridLayout class="page">
+	<ScrollView iosOverflowSafeArea="false">
+		<StackLayout class="page wj-detail" iosOverflowSafeArea="false">
+	
+			<StackLayout class="block-container"  iosOverflowSafeArea="false">
+
+				<Label [text]="'fa-arrow-left'" class="back far" (tap)="back()"></Label>
+				<Label textWrap="true" class="text-lg text-color" [text]="item.waName"></Label>
+				<Label class="text-gray-1" marginTop="5" [text]="item.periodFrom"></Label>
+
+				<FlexboxLayout marginTop="30" alignItems="center" justifyContent="space-between">
+					<StackLayout orientation="horizontal">
+						<Label  marginRight="5" verticalAlignment="center" [text]="'fa-clock' " class="text-sm far"></Label>
+						<!--<Label class="text-sm" verticalAlignment="center" [text]="jobWageLabel(job)"></Label>-->
+					</StackLayout>
+					<StackLayout orientation="horizontal">
+						<Label marginRight="5" [text]="'fa-location-arrow' " class="icon text-sm" verticalAlignment="center"></Label>
+						<Label [text]="item.jobAddress" textWrap="true" verticalAlignment="center" class="text-sm"></Label>
+					</StackLayout>
+				</FlexboxLayout>
+
+
+				<GridLayout rows="auto" columns="*, *" class="wj-wages" marginTop="15">
+					<StackLayout row="0" col="0" class="text-sm">
+						<StackLayout class="text-ruby" orientation="horizontal">
+							<Label marginRight="5" verticalAlignment="center" text="&#xf252;" class="text-sm text-ruby far"></Label>
+							<Label class="text-ruby text-sm" verticalAlignment="center" [text]="item.wjWage"></Label>
+						</StackLayout>
+						<Label class="text-gray-2 text-sm-2" text="holiday pay included"></Label>
+					</StackLayout>
+					<StackLayout row="0" col="1">
+						<StackLayout orientation="horizontal">
+							<Label marginRight="5" text="&#xf09d;" verticalAlignment="center" class="text-sm text-ruby far"></Label>
+							<Label class="text-ruby text-sm" verticalAlignment="center" [text]="item.wjSalary"></Label>
+						</StackLayout>
+						<Label class="text-gray-2 text-sm-2" text="holiday pay included"></Label>
+					</StackLayout>
+				</GridLayout>
+				<Label textWrap="true" class="requirements" [text]="item.requirements"></Label>
+				<GridLayout rows="auto" columns="80, *" marginTop="5">
+					<StackLayout verticalAlignment="center">
+						<!--<Image #companyLogo
+								(loaded)="getImage($event)"
+								width="60" height="60" verticalAlignment="center" horizontalAlignment="left"></Image>-->
+					</StackLayout>
+					<StackLayout col="1" verticalAlignment="center">
+						<Label class="text-md" [text]="item.companyName"></Label>
+
+						<StackLayout orientation="horizontal" class="rating" marginTop="5">
+							<!--<Label [text]="isRated(1) " class="text-primary icon"></Label>-->
+							<!--<Label [text]="isRated(2) " class="text-primary icon"></Label>-->
+							<!--<Label [text]="isRated(3) " class="text-primary icon"></Label>-->
+							<!--<Label [text]="isRated(4) " class="text-primary icon"></Label>-->
+							<!--<Label class="count" [text]="companyRatingLabel()"></Label>-->
+						</StackLayout>
+					</StackLayout>
+				</GridLayout>
+
+
+				<Label class="text-header bottom-border" marginTop="40" marginBottom="15" text="Profile for this job"></Label>
+
+				<StackLayout class="wj-skill" orientation="horizontal" iosOverflowSafeArea="false">
+					<StackLayout width="30" horizontalAlignment="center" marginTop="5" iosOverflowSafeArea="false">
+						<Label [text]="'fa-bookmark' " fontSize="20" class="icon text-gray-1"></Label>
+					</StackLayout>
+					<StackLayout iosOverflowSafeArea="false">
+						<!--Specialist (m/f) in medical-technical radiology with a diploma from a Swiss professional college-->
+						<Label class="text-md" marginBottom="1" textWrap="true" [text]="item.jobSkill.jobProfileId"></Label>
+						<Label marginBottom="1" *ngIf="item.jobSkill.educationalLevelId" class="text-md text-gray-1" textWrap="true" [text]="item.jobSkill.educationalLevelId"></Label>
+						<StackLayout orientation="horizontal" iosOverflowSafeArea="false" (tap)="showDescription = !showDescription">
+							<Label class="text-md" textWrap="true" text="Hide info"></Label>
+							<Label textWrap="true" [text]="(showDescription ? 'fa-angle-up': 'fa-angle-down') " class="fal"
+									verticalAlignment="center"
+									marginLeft="5"></Label>
+						</StackLayout>
+
+						<Label iosOverflowSafeArea="false" *ngIf="showDescription" marginTop="10" class="text-gray-1" textWrap="true" [text]="item.jobSkill.description"></Label>
+					</StackLayout>
+				</StackLayout>
+
+			</StackLayout>
+
+			<Label class="text-header block-container" marginTop="64" marginBottom="10" text="Shifts"></Label>
+
+			<StackLayout
+					*ngFor="let _shift of item.waDates"
+					class="status-none"
+					[ngClass]="{'status-accepted': _shift.wjDateStatus === 'ACCEPTED', 'status-declined': _shift.wjDateStatus === 'DECLINED'}"
+					iosOverflowSafeArea="false"
+			>
+				<StackLayout
+						orientation="horizontal"
+						[ngSwitch]="_shift.wjDateStatus"
+						class="wj-shift" iosOverflowSafeArea="false"
+				>
+					<StackLayout width="40" verticalAlignment="center" horizontalAlignment="center" iosOverflowSafeArea="false">
+						<Label *ngSwitchCase="'DECLINED'" [text]="'fa-ban' " fontSize="20" class="far text-gray-1" horizontalAlignment="center"></Label>
+						<Label *ngSwitchCase="'ACCEPTED'" [text]="'fa-paper-plane' " fontSize="20" class="far text-gray-1" horizontalAlignment="center"></Label>
+						<Label *ngSwitchDefault [text]="'fa-paper-plane' " fontSize="20" class="icon text-gray-1" horizontalAlignment="center"></Label>
+					</StackLayout>
+					<StackLayout iosOverflowSafeArea="false">
+						<Label class="text-md" [text]="_shift.waDate.startDateTime | date:'LLLL dd/MM/yyyy'"></Label>
+						<StackLayout orientation="horizontal" iosOverflowSafeArea="false">
+							<Label [text]="'fa-clock' "  verticalAlignment="center" class="far text-md text-gray-1"></Label>
+							<Label marginLeft="5" verticalAlignment="center" width="105" class="text-md text-gray-1" [text]="[_shift.waDate.startDateTime, _shift.waDate.endDateTime]"></Label>
+
+							<Label *ngSwitchCase="'DECLINED'" class="text-gray-1 text-ruby" marginLeft="10" text="Employer declined"></Label>
+							<Label *ngSwitchCase="'ACCEPTED'" class="text-gray-1" verticalAlignment="center" marginLeft="10" text="Application sent"></Label>
+							<Label *ngSwitchDefault class="text-gray-1" marginLeft="10" text="Application sent"></Label>
+						</StackLayout>
+					</StackLayout>
+				</StackLayout>
+			</StackLayout>
+
+
+			<StackLayout iosOverflowSafeArea="false" class="block-container">
+				<Label class="text-header" marginTop="35" text="Location"></Label>
+				<Label marginTop="10" marginBottom="10" [text]="item.jobAddress"></Label>
+
+				<!--<map-test-->
+						<!--*ngIf="item.jobLocation"-->
+						<!--[latitude]="item.jobLocation.lat"-->
+						<!--[longitude]="item.jobLocation.lng"-->
+				<!--&gt;</map-test>-->
+				<Label *ngIf="!item.jobLocation" text="No coordinates provided"></Label>
+
+				<Label *ngIf="item.jobMeetingPoint" marginTop="19" text="Meeting Point:"></Label>
+				<Label textWrap="true" [text]="item.jobMeetingPoint"></Label>
+
+				<Label *ngIf="item.dresscodeDescription" class="text-header" marginTop="36" text="Dresscode"></Label>
+				<Label marginTop="8" textWrap="true" [text]="item.dresscodeDescription"></Label>
+
+				<Label class="text-header" marginTop="40" text="Contact"></Label>
+
+				<!--<Label marginTop="11" [text]="contactLabel()"></Label>-->
+
+				<StackLayout
+						orientation="horizontal"
+						iosOverflowSafeArea="false"
+						marginTop="10"
+						(tap)="contactEmail()"
+				>
+					<Label verticalAlignment="center" marginRight="5" width="20" [text]="'fa-envelope' " class="icon"></Label>
+					<Label verticalAlignment="center" [text]="item.contactInfo.email" class="text-primary"></Label>
+				</StackLayout>
+
+				<StackLayout
+						orientation="horizontal"
+						marginTop="7"
+						(tap)="contactCall()"
+						iosOverflowSafeArea="false"
+				>
+					<Label width="20" marginRight="5" [text]="'fa-phone' " class="icon"></Label>
+					<Label [text]="item.contactInfo.mobileNumber" class="text-primary"></Label>
+				</StackLayout>
+
+				<StackLayout marginTop="50">
+					<Button (tap)="openApply()" horizontalAlignment="center" width="100%" class="btn btn-default" text="APPLY FOR THIS JOB"></Button>
+				</StackLayout>
+			</StackLayout>
+
+
+
+		</StackLayout>
+
+	</ScrollView>
+</GridLayout>
